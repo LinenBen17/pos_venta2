@@ -155,5 +155,82 @@ function btnEditarUser(id) {
     }
 
 }
+function btnEliminarUser(id){
+    Swal.fire({
+        title: 'Estás seguro de eliminar?',
+        text: "El usuario no  se eliminará de forma permanente, solo cambiará el estado a inactivo!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            const url = base_url + "Usuarios/eliminar/" + id;
+            const http = new XMLHttpRequest();
+        
+            http.open("GET", url, true);
+            http.send();
+            http.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    const res = JSON.parse(this.responseText);
+                    if (res == "ok") {
+                        Swal.fire(
+                            'Eliminado!',
+                            'Usuario eliminado con éxito.',
+                            'success'
+                        )
+                        tblUsuarios.ajax.reload();
+                    }else{
+                        Swal.fire(
+                            'Error!',
+                            res,
+                            'error'
+                        )
+                    }
+                }
+            }
+        }
+      })
+}
+function btnReingresarUser(id){
+    Swal.fire({
+        title: 'Estás seguro de reingresar?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            const url = base_url + "Usuarios/reingresar/" + id;
+            const http = new XMLHttpRequest();
+        
+            http.open("GET", url, true);
+            http.send();
+            http.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    const res = JSON.parse(this.responseText);
+                    if (res == "ok") {
+                        Swal.fire(
+                            'Todo correcto!',
+                            'Usuario reingresado con éxito.',
+                            'success'
+                        )
+                        tblUsuarios.ajax.reload();
+                    }else{
+                        Swal.fire(
+                            'Error!',
+                            res,
+                            'error'
+                        )
+                    }
+                }
+            }
+        }
+      })
+}
 // +595 973646420
 // Basosys Software
