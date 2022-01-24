@@ -54,22 +54,37 @@
             $clave = $_POST['clave'];
             $confirmar = $_POST['confirmar'];
             $caja = $_POST['caja'];
+            $id = $_POST['id'];
+            $hash = hash("SHA256", $clave);
 
-            if (empty($usuario) || empty($nombre) || empty($clave) || empty($caja)) {
+            if (empty($usuario) || empty($nombre) || empty($caja)) {
                 $msg = "Todos los campos son requeridos";
-            }elseif ($clave != $confirmar) {
-                $msg = "Las contraseñas no coinciden";
             }else{
-                $data = $this->model->registrarUsuario($usuario, $nombre, $clave, $caja);
-
-                if ($data == "Todo pi0la") {
-                    $msg = "Usuario registrado con éxito";
-                }else if ($data == "Si existe xD"){
-                    $msg = "El usuario ya está en uso";
+                if($id == "") {
+                    if ($clave != $confirmar) {
+                        $msg = "Las contraseñas no coinciden";
+                    }else{
+                        $data = $this->model->registrarUsuario($usuario, $nombre, $hash, $caja);
+        
+                        if ($data == "Todo pi0la") {
+                            $msg = "Usuario registrado con éxito";
+                        }else if ($data == "Si existe xD") {
+                            $msg = "El usuario ya está en uso";
+                        }else {
+                            $msg = "Error al registrar el usuario";
+                        }
+                    }
                 }else {
-                    $msg = "Error al registrar el usuario";
+                    $data = $this->model->modificarUsuario($usuario, $nombre, $caja, $id);
+        
+                    if ($data == "modificado") {
+                        $msg = "modificado";
+                    }else {
+                        $msg = "Error al modificar el usuario";
+                    }
                 }
             }
+            
             echo json_encode($msg, JSON_UNESCAPED_UNICODE);
             die();
         }
